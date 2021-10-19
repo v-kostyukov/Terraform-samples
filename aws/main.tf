@@ -1,13 +1,16 @@
 provider "aws" {
   region = "eu-central-1"
 }
+
 variable "server_port" {
   description = "The port the server will use for HTTP requests"
   type        = number
   default     = 8080
 }
 
-/*resource "aws_instance" "example" {
+/*
+### EC2
+resource "aws_instance" "example" {
   ami           = "ami-05f7491af5eef733a"
   instance_type = "t2.micro"
   vpc_security_group_ids = [aws_security_group.instance.id]
@@ -22,6 +25,7 @@ variable "server_port" {
   }
 }*/
 
+### SG
 resource "aws_security_group" "instance" {
   name = "terraform-example-instance"
 
@@ -56,6 +60,7 @@ data "aws_subnet_ids" "default" {
   vpc_id = data.aws_vpc.default.id
 }
 
+### ASG
 resource "aws_autoscaling_group" "example" {
   launch_configuration = aws_launch_configuration.example.name
   vpc_zone_identifier  = data.aws_subnet_ids.default.ids
@@ -73,7 +78,7 @@ resource "aws_autoscaling_group" "example" {
   }
 }
 
-# ALB
+### ALB
 resource "aws_lb" "example" {
   name               = "terraform-asg-example"
   load_balancer_type = "application"
