@@ -8,23 +8,6 @@ variable "server_port" {
   default     = 8080
 }
 
-/*
-### EC2
-resource "aws_instance" "example" {
-  ami           = "ami-05f7491af5eef733a"
-  instance_type = "t2.micro"
-  vpc_security_group_ids = [aws_security_group.instance.id]
-
-  user_data     = <<-EOF
-                  #!/bin/bash
-                  echo "Hello world" > index.html
-                  nohup busybox httpd -f -p ${var.server_port} &
-                  EOF
-  tags = {
-    Name = "terraform-example"
-  }
-}*/
-
 ### SG
 resource "aws_security_group" "instance" {
   name = "terraform-example-instance"
@@ -153,13 +136,3 @@ output "alb_dns_name" {
   value       = aws_lb.example.dns_name
   description = "The domain name of the load balancer"
 }
-
-/*output "instance_id" {
-  description = "ID of the EC2 instance"
-  value       = aws_instance.example.id
-}*/
-
-/*output "instance_public_ip" {
-  description = "The public IP address of the web server"
-  value       = aws_instance.example.public_ip
-}*/
